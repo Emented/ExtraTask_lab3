@@ -1,3 +1,5 @@
+import java.util.SortedMap;
+
 public class Main {
     public static void main(String[] args) {
         ValueSupplier valueSupplier = new ValueSupplier();
@@ -9,11 +11,7 @@ public class Main {
         TestClass t = new TestClass();
         System.out.println("Before:");
         t.printer();
-        try {
-            valueSupplier.fillValues(t);
-        } catch (IllegalAccessException e) {
-            System.out.println("нет доступа к полю, возможно оно final");
-        }
+        valueSupplier.fillValues(t);
         System.out.println("After:");
         t.printer();
     }

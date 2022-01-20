@@ -1,5 +1,7 @@
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.function.Supplier;
 
 //делаем аннотацию доступной для рефлексии
 @Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
 @interface AutoFillValue {
 }
 
@@ -21,17 +24,23 @@ class ValueSupplier {
     }
 
     //метод заполение полей метода по правилам, записанным в hashMap
-    public void fillValues(Object object) throws IllegalAccessException {
+    public void fillValues(Object object) {
         for (Field field : object.getClass().getDeclaredFields()) {
             boolean isAnnotatedCorrectly = !(field.getAnnotation(AutoFillValue.class) == null);
             boolean isTypeCorrect = factories.containsKey(field.getType());
             if (isAnnotatedCorrectly && isTypeCorrect) {
                 for (Type key : factories.keySet()) {
                     if (key == field.getType()) {
-                        //открываем доступ к private полям
-                        field.setAccessible(true);
-                        //записываем значения для объекта, переданного в аргументы
-                        field.set(object, factories.get(key).get());
+                        try {
+                            //открываем доступ к private полям
+                            field.setAccessible(true);
+                            //записываем значения для объекта, переданного в аргументы
+                            field.set(object, factories.get(key).get());
+                        } catch (IllegalAccessException e) {
+                            System.out.println("ошибка доступа к полю " + field.getName());
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("объект: " + object.getClass().getName() + " не является экземпляром класса, объявляющего поле: " + field.getName());
+                        }
                     }
                 }
             }
