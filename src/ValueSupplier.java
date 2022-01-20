@@ -18,8 +18,9 @@ class ValueSupplier {
     //hashMap фабрик
     private final Map<Class<?>, Supplier<?>> factories = new HashMap<>();
 
-    //метод добавления фабрики
+    //метод который позволяет добавить фабрику для определенного типа поля
     public <T> void addValueFactory(Class<? extends T> clazz, Supplier<T> valueFactory) {
+        if (factories.containsKey(clazz)) throw new IllegalArgumentException("фабрика для данного типа уже сущетвует");
         factories.put(clazz, valueFactory);
     }
 
