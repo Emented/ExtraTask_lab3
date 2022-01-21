@@ -9,7 +9,10 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 //делаем аннотацию доступной для рефлексии
+
+//в какой момент доступна аннотация (в данном случае в ходе выполнения программы)
 @Retention(RetentionPolicy.RUNTIME)
+//указывает, какой элемент программы будет использоваться аннотацией
 @Target(ElementType.FIELD)
 @interface AutoFillValue {
 }
