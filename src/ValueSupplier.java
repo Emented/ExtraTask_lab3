@@ -40,7 +40,7 @@ class ValueSupplier {
                         } catch (IllegalAccessException e) {
                             System.out.println("ошибка доступа к полю " + field.getName());
                         } catch (IllegalArgumentException e) {
-                            System.out.println("объект: " + object.getClass().getName() + " не является экземпляром класса, объявляющего поле: " + field.getName());
+                            System.out.println("ошибка в самом поле " + field.getName());
                         }
                     }
                 }
